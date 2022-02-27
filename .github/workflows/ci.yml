@@ -25,7 +25,7 @@ jobs:
       - name: "Set up JDK"
         uses: "actions/setup-java@v2"
         with:
-          java-distribution: "temurin"
+          distribution: "temurin"
           java-version: "${{ env.java-version }}"
       - name: "Gradle build"
         uses: "gradle/gradle-build-action@v2"
