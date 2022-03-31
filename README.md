@@ -1,4 +1,5 @@
-![CI](https://github.com/vvanholl/elasticsearch-prometheus-exporter/workflows/CI/badge.svg?branch=master)
+[![build status](https://github.com/mindw/elasticsearch-prometheus-exporter/workflows/CI/badge.svg?branch=master)](https://github.com/mindw/elasticsearch-prometheus-exporter/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/mindw/elasticsearch-prometheus-exporter/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/mindw/elasticsearch-prometheus-exporter/actions/workflows/codeql-analysis.yml)
 
 # Prometheus Exporter Plugin for Elasticsearch
 
@@ -21,6 +22,24 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 - Indices status
 - Cluster settings (selected [disk allocation settings](https://www.elastic.co/guide/en/elasticsearch/reference/master/disk-allocator.html) only)
 - Prometheus HotSpot metrics
+
+## Fork diff with upstream
+
+- 100% compatible metrics names with upstream.
+- 99% of metrics names synced with official documentation.
+- Added support OpenMetrics 1.0 format (info, enum, units etc)
+- Expose units where applicable.
+- Expose indexing pressure metrics.
+- Expose adaptive selection metrics.
+- Expose discovery metrics.
+- Expose JVM cgroups metrics.
+- Expose Elasticsearch node version.
+- Expand FS metrics with per device metrics
+- Get all times in milliseconds to avoid losing sub second precision.
+- Fixed `threadpool` metrics
+- Add prometheus `client_hotspot` metrics.  
+- Fixed test suite.
+- Updated GitHub actions.
 
 ## Compatibility matrix
 
@@ -80,7 +99,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ## Install
 
-`./bin/elasticsearch-plugin install -b https://github.com/vvanholl/elasticsearch-prometheus-exporter/releases/download/7.16.3.0/prometheus-exporter-7.16.3.0.zip`
+`./bin/elasticsearch-plugin install -b https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/7.17.1.1/prometheus-exporter-7.17.1.1.zip`
 
 **Do not forget to restart the node after the installation!**
 

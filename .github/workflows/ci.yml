@@ -1,4 +1,4 @@
-name: "CI"
+name: CI
 
 on:
   push:
@@ -6,39 +6,42 @@ on:
       - "master"
       - "5.x"
       - "6.x"
+      - "7.x"
   pull_request:
     branches:
       - "master"
       - "5.x"
       - "6.x"
+      - "7.x"
 
 env:
-  gradle-version: "7.4"
+  gradle-version: "7.4.2"
   java-version: "17"
 
 jobs:
   build:
-    runs-on: "ubuntu-latest"
+    runs-on: ubuntu-latest
     steps:
-      - name: "Checkout repository"
-        uses: "actions/checkout@v2"
-      - name: "Set up JDK"
-        uses: "actions/setup-java@v2"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
-          distribution: "temurin"
+          distribution: temurin
           java-version: "${{ env.java-version }}"
-      - name: "Gradle build"
-        uses: "gradle/gradle-build-action@v2"
+      - name: Gradle build
+        uses: gradle/gradle-build-action@v2
         with:
           gradle-version: "${{ env.gradle-version }}"
           arguments: "--build-cache assemble"
-      - name: "Gradle check"
-        uses: "gradle/gradle-build-action@v2"
+      - name: Gradle check
+        uses: gradle/gradle-build-action@v2
         with:
-          gradle-version: "${{ env.gradle-version }}"
-          arguments: "check"
-      - name: "GitHub release"
-        if: "contains('refs/heads/master refs/heads/5.x refs/heads/6.x', github.ref)"
+          gradle-version: ${{ env.gradle-version }}
+          arguments: check
+      - name: GitHub release
+        if: contains('refs/heads/master refs/heads/6.x refs/heads/7.x', github.ref)
         run: |
           version=$(cat gradle.properties | grep -e "^version *=" | awk -F" *= *" '{print $NF}')
           is_snapshot=$(echo ${version} | grep -e "-SNAPSHOT$" | wc -l)
