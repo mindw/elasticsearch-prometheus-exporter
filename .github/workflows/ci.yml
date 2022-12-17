@@ -16,31 +16,20 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-2022, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
-
-    - uses: actions/cache@v3
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
 
     - name: Set up JDK
       uses: actions/setup-java@v3
       with:
         distribution: temurin
         java-version: "${{ env.java-version }}"
-
-    - name: Gradle build
-      uses: gradle/gradle-build-action@v2
-      with:
-        gradle-version: "${{ env.gradle-version }}"
-        arguments: "--build-cache assemble"
 
     - name: Gradle check
       uses: gradle/gradle-build-action@v2
@@ -49,11 +38,11 @@ jobs:
         arguments: check
 
     - name: GitHub release
-      if: contains('refs/heads/master refs/heads/6.x refs/heads/7.x', github.ref)
+      if: contains('refs/heads/master refs/heads/7.x', github.ref) && matrix.os == 'ubuntu-22.04'
       run: |
         version=$(cat gradle.properties | grep -e "^version *=" | awk -F" *= *" '{print $NF}')
         is_snapshot=$(echo ${version} | grep -e "-SNAPSHOT$" | wc -l)
         if [ "$is_snapshot" == "0" ]; then
             echo ${{ github.token }} | gh auth login --with-token
-            gh release create ${version} ./build/distributions/*.zip
+            gh release create ${version} ./build/distributions/*.zip -n "${version}"
         fi
