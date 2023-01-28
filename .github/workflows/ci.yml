@@ -19,11 +19,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-22.04, windows-2022, macos-latest]
+        os: [ubuntu-20.04, windows-2022, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
     - name: Configure sysctl limits
-      if: matrix.os == 'ubuntu-22.04'
+      if: matrix.os == 'ubuntu-20.04'
       run: |
         sudo swapoff -a
         sudo sysctl -w vm.swappiness=1
@@ -52,7 +52,7 @@ jobs:
         arguments: check
 
     - name: GitHub release
-      if: contains('refs/heads/master refs/heads/7.x', github.ref) && matrix.os == 'ubuntu-22.04'
+      if: contains('refs/heads/master refs/heads/7.x', github.ref) && matrix.os == 'macos-latest'
       run: |
         version=$(cat gradle.properties | grep -e "^version *=" | awk -F" *= *" '{print $NF}')
         is_snapshot=$(echo ${version} | grep -e "-SNAPSHOT$" | wc -l)
