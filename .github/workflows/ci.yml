@@ -52,7 +52,7 @@ jobs:
         arguments: check
 
     - name: GitHub release
-      if: contains('refs/heads/master refs/heads/7.x', github.ref) && matrix.os == 'macos-latest'
+      if: contains('refs/heads/master refs/heads/7.x', github.ref) && matrix.os == 'ubuntu-20.04'
       run: |
         version=$(cat gradle.properties | grep -e "^version *=" | awk -F" *= *" '{print $NF}')
         is_snapshot=$(echo ${version} | grep -e "-SNAPSHOT$" | wc -l)
