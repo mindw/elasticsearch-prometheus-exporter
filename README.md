@@ -47,6 +47,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin   | Release date |
 |---------------|----------|--------------|
+| 7.17.9        | 7.17.9.0 | Feb 02, 2023 |
 | 7.17.8        | 7.17.8.0 | Dec 09, 2022 |
 | 7.17.7        | 7.17.7.0 | Oct 28, 2022 |
 | 7.17.6        | 7.17.6.0 | Aug 28, 2022 |
@@ -106,7 +107,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ## Install
 
-`./bin/elasticsearch-plugin install -b https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/7.17.8.0/prometheus-exporter-7.17.8.0.zip`
+`./bin/elasticsearch-plugin install -b https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/7.17.9.0/prometheus-exporter-7.17.9.0.zip`
 
 **Do not forget to restart the node after the installation!**
 
@@ -192,7 +193,7 @@ Just keep in mind that `metrics_path` must be `/_prometheus/metrics`, otherwise 
 
 ## Project sources
 
-The Maven project site is available at [GitHub](https://github.com/vvanholl/elasticsearch-prometheus-exporter).
+The Maven project site is available at [GitHub](https://github.com/mindw/elasticsearch-prometheus-exporter).
 
 ## Testing
 
@@ -202,7 +203,7 @@ framework.
 
 To run everything similar to the GitHub Actions pipeline you can do:
 ```
-docker run -v $(pwd):/home/gradle gradle:7.4.1-jdk17 su gradle -c 'gradle check'
+docker run -v $(pwd):/home/gradle gradle:7.5.1-jdk17 su gradle -c 'gradle check'
 ```
 NOTE: Please keep version in sync with .github/workflows/ci.yml
 
