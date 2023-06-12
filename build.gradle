@@ -104,3 +104,5 @@ checkstyle {
     configFile = new File(rootDir, "checkstyle.xml")
     toolVersion = "8.2"
 }
+
+configurations.all { exclude group: 'org.elasticsearch', module: 'elasticsearch-preallocate' }
