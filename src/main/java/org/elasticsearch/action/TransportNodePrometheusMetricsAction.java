@@ -32,7 +32,6 @@ import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.support.ActionFilters;
 import org.elasticsearch.action.support.HandledTransportAction;
 import org.elasticsearch.client.internal.Client;
-import org.elasticsearch.client.internal.Requests;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.ClusterSettings;
 import org.elasticsearch.common.settings.Settings;
@@ -105,13 +104,9 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
             this.listener = listener;
 
             // Note: when using ClusterHealthRequest in Java, it pulls data at the shards level, according to ES source
-            // code comment this is "so it is backward compatible with the transport client behaviour".
-            // hence we are explicit about ClusterHealthRequest level and do not rely on defaults.
-            // https://www.elastic.co/guide/en/elasticsearch/reference/6.4/cluster-health.html#request-params
-            this.healthRequest = Requests.clusterHealthRequest().local(true);
-            this.healthRequest.level(ClusterHealthRequest.Level.SHARDS);
+            this.healthRequest = new ClusterHealthRequest().local(true);
 
-            this.nodesStatsRequest = Requests.nodesStatsRequest("_local").clear().all();
+            this.nodesStatsRequest = new NodesStatsRequest("_local").clear().all();
 
             // Indices stats request is not "node-specific", it does not support any "_local" notion
             // it is broad-casted to all cluster nodes.
@@ -119,8 +114,7 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
 
             // Cluster settings are get via ClusterStateRequest (see elasticsearch RestClusterGetSettingsAction for details)
             // We prefer to send it to master node (hence local=false; it should be set by default but we want to be sure).
-            this.clusterStateRequest = isPrometheusClusterSettings ? Requests.clusterStateRequest()
-                    .clear().metadata(true).local(false) : null;
+            this.clusterStateRequest = isPrometheusClusterSettings ? new ClusterStateRequest().clear().metadata(true).local(false) : null;
         }
 
         private void gatherRequests() {
