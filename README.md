@@ -20,7 +20,9 @@ It collects all relevant metrics and makes them available to Prometheus via the 
     - File System
     - Circuit Breaker
 - Indices status
-- Cluster settings (selected [disk allocation settings](https://www.elastic.co/guide/en/elasticsearch/reference/master/disk-allocator.html) only)
+- Cluster settings (
+  selected [disk allocation settings](https://www.elastic.co/guide/en/elasticsearch/reference/master/disk-allocator.html)
+  only)
 - Prometheus HotSpot metrics
 
 ## Fork diff with upstream
@@ -37,7 +39,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 - Expand FS metrics with per device metrics
 - Get all times in milliseconds to avoid losing sub second precision.
 - Fixed `threadpool` metrics
-- Add prometheus `client_hotspot` metrics.  
+- Add prometheus `client_hotspot` metrics.
 - Fixed test suite.
 - Updated GitHub actions.
 - Expose 8.x introduced metrics.
@@ -54,6 +56,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin  | Release date |
 |---------------|---------|--------------|
+| 8.8.2         | 8.8.2.0 | Jun 30, 2023 |
 | 8.8.1         | 8.8.1.0 | Jun 30, 2023 |
 | 8.7.1         | 8.7.1.0 | May 05, 2023 |
 | 8.7.0         | 8.7.0.0 | Apr 26, 2023 |
@@ -87,7 +90,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ```
 ./bin/elasticsearch-plugin install -b \
-  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.8.1.0/prometheus-exporter-8.8.1.0.zip
+  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.8.2.0/prometheus-exporter-8.8.2.0.zip
 ```
 
 **Do not forget to restart the node after the installation!**
@@ -107,11 +110,13 @@ prometheus.indices: false
 ```
 
 To disable exporting cluster settings use:
+
 ```
 prometheus.cluster.settings: false
 ```
 
-These settings can be also [updated dynamically](https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-update-settings.html).
+These settings can be
+also [updated dynamically](https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-update-settings.html).
 
 ## Uninstall
 
@@ -183,18 +188,21 @@ Project contains [integration tests](src/yamlRestTest/resources/rest-api-spec) i
 framework.
 
 To run everything similar to the GitHub Actions pipeline you can do:
+
 ```
 docker run -v $(pwd):/home/gradle gradle:7.4.2-jdk17 su gradle -c 'gradle check'
 ```
+
 NOTE: Please keep version in sync with `.github/workflows/ci.yml`
 
-
 Complete test suite is run using:
+
 ```
 gradle clean check
 ```
 
 To run individual test file use:
+
 ```
 gradle :integTest \
   -Dtests.class=org.elasticsearch.rest.PrometheusRestHandlerClientYamlTestSuiteIT \
