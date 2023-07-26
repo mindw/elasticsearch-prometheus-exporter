@@ -732,20 +732,20 @@ public class PrometheusMetricsCollector {
     private void updateThreadPoolMetrics(ThreadPoolStats tps) {
         if (tps != null) {
             for (ThreadPoolStats.Stats st : tps) {
-                String name = st.getName();
-                catalog.setNodeGauge("threadpool_threads_number", st.getThreads(), name, "threads");
-                catalog.setNodeGauge("threadpool_tasks_number", st.getQueue(), name, "queue");
-                catalog.setNodeGauge("threadpool_threads_number", st.getActive(), name, "active");
-                catalog.setNodeGauge("threadpool_threads_number", st.getLargest(), name, "largest");
-                catalog.setNodeGauge("threadpool_threads_count", st.getCompleted(), name, "completed");
-                catalog.setNodeGauge("threadpool_threads_count", st.getRejected(), name, "rejected");
+                String name = st.name();
+                catalog.setNodeGauge("threadpool_threads_number", st.threads(), name, "threads");
+                catalog.setNodeGauge("threadpool_tasks_number", st.queue(), name, "queue");
+                catalog.setNodeGauge("threadpool_threads_number", st.active(), name, "active");
+                catalog.setNodeGauge("threadpool_threads_number", st.largest(), name, "largest");
+                catalog.setNodeGauge("threadpool_threads_count", st.completed(), name, "completed");
+                catalog.setNodeGauge("threadpool_threads_count", st.rejected(), name, "rejected");
 
-                catalog.setNodeGauge("threadpool_threads", st.getThreads(), name);
-                catalog.setNodeGauge("threadpool_queue", st.getQueue(), name);
-                catalog.setNodeGauge("threadpool_active", st.getActive(), name);
-                catalog.setNodeGauge("threadpool_largest", st.getLargest(), name);
-                catalog.setNodeCounter("threadpool_rejected", st.getCompleted(), name);
-                catalog.setNodeCounter("threadpool_completed", st.getRejected(), name);
+                catalog.setNodeGauge("threadpool_threads", st.threads(), name);
+                catalog.setNodeGauge("threadpool_queue", st.queue(), name);
+                catalog.setNodeGauge("threadpool_active", st.active(), name);
+                catalog.setNodeGauge("threadpool_largest", st.largest(), name);
+                catalog.setNodeCounter("threadpool_rejected", st.completed(), name);
+                catalog.setNodeCounter("threadpool_completed", st.rejected(), name);
             }
         }
     }
@@ -771,28 +771,28 @@ public class PrometheusMetricsCollector {
     @SuppressWarnings("checkstyle:LineLength")
     private void updateIngestMetrics(IngestStats is) {
         if (is != null) {
-            catalog.setNodeGauge("ingest_total_count", is.getTotalStats().getIngestCount());
-            catalog.setNodeGauge("ingest_total_time", is.getTotalStats().getIngestTimeInMillis() / 1E3);
-            catalog.setNodeGauge("ingest_total_current", is.getTotalStats().getIngestCurrent());
-            catalog.setNodeGauge("ingest_total_failed_count", is.getTotalStats().getIngestFailedCount());
+            catalog.setNodeGauge("ingest_total_count", is.totalStats().ingestCount());
+            catalog.setNodeGauge("ingest_total_time", is.totalStats().ingestTimeInMillis() / 1E3);
+            catalog.setNodeGauge("ingest_total_current", is.totalStats().ingestCurrent());
+            catalog.setNodeGauge("ingest_total_failed_count", is.totalStats().ingestFailedCount());
 
-            for (IngestStats.PipelineStat st : is.getPipelineStats()) {
-                String pipeline = st.getPipelineId();
-                catalog.setNodeGauge("ingest_pipeline_total_count", st.getStats().getIngestCount(), pipeline);
-                catalog.setNodeGauge("ingest_pipeline_total_time", st.getStats().getIngestTimeInMillis() / 1E3,
+            for (IngestStats.PipelineStat st : is.pipelineStats()) {
+                String pipeline = st.pipelineId();
+                catalog.setNodeGauge("ingest_pipeline_total_count", st.stats().ingestCount(), pipeline);
+                catalog.setNodeGauge("ingest_pipeline_total_time", st.stats().ingestTimeInMillis() / 1E3,
                         pipeline);
-                catalog.setNodeGauge("ingest_pipeline_total_current", st.getStats().getIngestCurrent(), pipeline);
-                catalog.setNodeGauge("ingest_pipeline_total_failed_count", st.getStats().getIngestFailedCount(), pipeline);
+                catalog.setNodeGauge("ingest_pipeline_total_current", st.stats().ingestCurrent(), pipeline);
+                catalog.setNodeGauge("ingest_pipeline_total_failed_count", st.stats().ingestFailedCount(), pipeline);
 
-                List<IngestStats.ProcessorStat> pss = is.getProcessorStats().get(pipeline);
+                List<IngestStats.ProcessorStat> pss = is.processorStats().get(pipeline);
                 if (pss != null) {
                     for (IngestStats.ProcessorStat ps : pss) {
-                        String processor = ps.getName();
-                        catalog.setNodeGauge("ingest_pipeline_processor_total_count", ps.getStats().getIngestCount(), pipeline, processor);
-                        catalog.setNodeGauge("ingest_pipeline_processor_total_time", ps.getStats().getIngestTimeInMillis() / 1E3,
+                        String processor = ps.name();
+                        catalog.setNodeGauge("ingest_pipeline_processor_total_count", ps.stats().ingestCount(), pipeline, processor);
+                        catalog.setNodeGauge("ingest_pipeline_processor_total_time", ps.stats().ingestTimeInMillis() / 1E3,
                                 pipeline, processor);
-                        catalog.setNodeGauge("ingest_pipeline_processor_total_current", ps.getStats().getIngestCurrent(), pipeline, processor);
-                        catalog.setNodeGauge("ingest_pipeline_processor_total_failed_count", ps.getStats().getIngestFailedCount(), pipeline, processor);
+                        catalog.setNodeGauge("ingest_pipeline_processor_total_current", ps.stats().ingestCurrent(), pipeline, processor);
+                        catalog.setNodeGauge("ingest_pipeline_processor_total_failed_count", ps.stats().ingestFailedCount(), pipeline, processor);
                     }
                 }
             }
