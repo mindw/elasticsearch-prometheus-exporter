@@ -92,7 +92,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ```
 ./bin/elasticsearch-plugin install -b \
-  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.9.0.0/prometheus-exporter-8.9.0.0.zip
+  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.9.1.0/prometheus-exporter-8.9.1.0.zip
 ```
 
 **Do not forget to restart the node after the installation!**
