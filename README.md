@@ -29,7 +29,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 - 100% compatible metrics names with upstream.
 - 99% of metrics names synced with official documentation.
-- Added support OpenMetrics 1.0 format (info, enum, units etc)
+- Added support OpenMetrics 1.0 format (info, enum, units etc.)
 - Expose units where applicable.
 - Expose indexing pressure metrics.
 - Expose adaptive selection metrics.
@@ -56,6 +56,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin  | Release date |
 |---------------|---------|--------------|
+| 8.9.1         | 8.9.1.0 | Aug 19, 2023 |
 | 8.9.0         | 8.9.0.0 | Jul 26, 2023 |
 | 8.8.2         | 8.8.2.0 | Jun 30, 2023 |
 | 8.8.1         | 8.8.1.0 | Jun 30, 2023 |
