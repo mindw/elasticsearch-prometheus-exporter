@@ -173,7 +173,7 @@ public class PrometheusMetricsCollector {
             }
 
             // populate node version (different between nodes).
-            var build = Build.CURRENT;
+            var build = Build.current();
             catalog.setNodeInfo(
                     "node_version",
                     build.qualifiedVersion(),
@@ -299,6 +299,7 @@ public class PrometheusMetricsCollector {
         catalog.registerNodeGauge("indices_node_mapping_total_count", "Number of mappings, including <<runtime,runtime>> and <<object,object>> fields");
         catalog.registerNodeGaugeUnit("indices_node_mapping_total_estimated_overhead", "bytes", "Estimated heap overhead, in bytes, of mappings on this node, which allows for 1kiB of heap for every mapped field.");
 
+        catalog.registerNodeGauge("indices_node_dense_vector_total_count", "Number of dense vector indexed across all shards assigned to the node.");
     }
 
     @SuppressWarnings("checkstyle:LineLength")
@@ -418,6 +419,8 @@ public class PrometheusMetricsCollector {
 
             catalog.setNodeGauge("indices_node_mapping_total_count", idx.getNodeMappingStats().getTotalCount());
             catalog.setNodeGauge("indices_node_mapping_total_estimated_overhead", idx.getNodeMappingStats().getTotalEstimatedOverhead().getBytes());
+
+            catalog.setNodeGauge("indices_node_dense_vector_total_count", idx.getDenseVectorStats().getValueCount());
         }
     }
 
@@ -688,7 +691,8 @@ public class PrometheusMetricsCollector {
     private void updateTransportMetrics(TransportStats ts) {
         if (ts != null) {
             catalog.setNodeGauge("transport_server_open_number", ts.getServerOpen());
-            catalog.setNodeCounter("transport_outbound_connections", ts.totalOutboundConnections());
+            // ES 8.10 removed the API since it's dead code to them.
+            // catalog.setNodeCounter("transport_outbound_connections", ts.totalOutboundConnections());
             catalog.setNodeGauge("transport_rx_packets_count", ts.getRxCount());
             catalog.setNodeGauge("transport_tx_packets_count", ts.getTxCount());
             catalog.setNodeCounter("transport_rx_packets", ts.getRxCount());
