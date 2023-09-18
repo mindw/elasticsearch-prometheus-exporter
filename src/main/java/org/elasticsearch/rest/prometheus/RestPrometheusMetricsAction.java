@@ -91,7 +91,8 @@ public class RestPrometheusMetricsAction extends BaseRestHandler {
                         String nodeName = response.getNodeStats().getNode().getName();
                         String nodeId = response.getNodeStats().getNode().getId();
                         if (logger.isTraceEnabled()) {
-                            logger.trace("Prepare new Prometheus metric collector for: [{}], [{}], [{}]", clusterName,
+                            logger.trace("Prepare new Prometheus metric collector for: [{}], [{}], [{}]",
+                                    clusterName,
                                     nodeId,
                                     nodeName
                             );

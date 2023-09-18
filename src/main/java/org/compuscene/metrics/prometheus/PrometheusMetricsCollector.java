@@ -17,6 +17,10 @@
 
 package org.compuscene.metrics.prometheus;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,7 +35,9 @@ import org.elasticsearch.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.cluster.health.ClusterIndexHealth;
 import org.elasticsearch.cluster.node.DiscoveryNodeRole;
 import org.elasticsearch.cluster.service.ClusterStateUpdateStats;
+import org.elasticsearch.common.Strings;
 import org.elasticsearch.common.util.set.Sets;
+import org.elasticsearch.common.xcontent.ChunkedToXContent;
 import org.elasticsearch.discovery.DiscoveryStats;
 import org.elasticsearch.http.HttpStats;
 import org.elasticsearch.index.stats.IndexingPressureStats;
@@ -693,6 +699,16 @@ public class PrometheusMetricsCollector {
             catalog.setNodeGauge("transport_server_open_number", ts.getServerOpen());
             // ES 8.10 removed the API since it's dead code to them.
             // catalog.setNodeCounter("transport_outbound_connections", ts.totalOutboundConnections());
+            {
+                String json = Strings.toString(ChunkedToXContent.wrapAsToXContent(ts), false, false);
+                try {
+                    JsonNode parent = new ObjectMapper().readTree(json);
+                    long val = parent.path("total_outbound_connections").asLong();
+                    catalog.setNodeCounter("transport_outbound_connections", val);
+                } catch (JsonProcessingException e) {
+                    logger.error(e.getMessage(), e);
+                }
+            }
             catalog.setNodeGauge("transport_rx_packets_count", ts.getRxCount());
             catalog.setNodeGauge("transport_tx_packets_count", ts.getTxCount());
             catalog.setNodeCounter("transport_rx_packets", ts.getRxCount());
@@ -920,12 +936,35 @@ public class PrometheusMetricsCollector {
             catalog.setNodeGauge("jvm_mem_heap_committed", jvm.getMem().getHeapCommitted().getBytes());
             catalog.setNodeGauge("jvm_mem_nonheap_committed", jvm.getMem().getNonHeapCommitted().getBytes());
 
+            // peak stats have no accessors, so we serialize the stats to json and extract it from there.
+            JsonNode parent = null;
+            String json = Strings.toString(jvm, false, false);
+            //logger.warn(json);
+            try {
+                parent = new ObjectMapper().readTree(json);
+            } catch (JsonProcessingException e) {
+                logger.warn(e.getMessage(), e);
+            }
             for (JvmStats.MemoryPool mp : jvm.getMem()) {
                 String name = mp.getName();
                 catalog.setNodeGauge("jvm_mem_pool_max", mp.getMax().getBytes(), name);
                 // catalog.setNodeGauge("jvm_mem_pool_peak_max", mp.getPeakMax().getBytes(), name);
                 catalog.setNodeGauge("jvm_mem_pool_used", mp.getUsed().getBytes(), name);
                 // catalog.setNodeGauge("jvm_mem_pool_peak_used", mp.getPeakUsed().getBytes(), name);
+                if (parent != null) {
+                    final JsonNode max = parent.at("/jvm/mem/pools/" + name + "/peak_max_in_bytes");
+                    if (!max.isMissingNode()) {
+                        catalog.setNodeGauge("jvm_mem_pool_peak_max", max.asLong(), name);
+                    } else {
+                        logger.warn("Failed extracting jvm_mem_pool_peak_max from JvmStats");
+                    }
+                    final JsonNode used = parent.at("/jvm/mem/pools/" + name + "/peak_max_in_bytes");
+                    if (!used.isMissingNode()) {
+                        catalog.setNodeGauge("jvm_mem_pool_peak_used", used.asLong(), name);
+                    } else {
+                        logger.warn("Failed extracting jvm_mem_pool_peak_used from JvmStats");
+                    }
+                }
             }
 
             catalog.setNodeGauge("jvm_threads_number", jvm.getThreads().getCount());
