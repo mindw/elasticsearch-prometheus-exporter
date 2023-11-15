@@ -20,24 +20,26 @@ It collects all relevant metrics and makes them available to Prometheus via the 
     - File System
     - Circuit Breaker
 - Indices status
-- Cluster settings (selected [disk allocation settings](https://www.elastic.co/guide/en/elasticsearch/reference/master/disk-allocator.html) only)
+- Cluster settings (
+  selected [disk allocation settings](https://www.elastic.co/guide/en/elasticsearch/reference/master/disk-allocator.html)
+  only)
 - Prometheus HotSpot metrics
 
 ## Fork diff with upstream
 
 - 100% compatible metrics names with upstream.
 - 99% of metrics names synced with official documentation.
-- Added support OpenMetrics 1.0 format (info, enum, units etc)
+- Added support OpenMetrics 1.0 format (info, enum, units etc.)
 - Expose units where applicable.
 - Expose indexing pressure metrics.
 - Expose adaptive selection metrics.
 - Expose discovery metrics.
-- Expose JVM cgroups metrics.
+- Expose JVM `cgroups` metrics.
 - Expose Elasticsearch node version.
 - Expand FS metrics with per device metrics
 - Get all times in milliseconds to avoid losing sub second precision.
 - Fixed `threadpool` metrics
-- Add prometheus `client_hotspot` metrics.  
+- Add prometheus `client_hotspot` metrics.
 - Fixed test suite.
 - Updated GitHub actions.
 
@@ -47,6 +49,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin    | Release date |
 |---------------|-----------|--------------|
+| 7.17.15       | 7.17.15.0 | Nov 15, 2023 |
 | 7.17.14       | 7.17.14.0 | Oct 18, 2023 |
 | 7.17.13       | 7.17.13.0 | Sep 09, 2023 |
 | 7.17.12       | 7.17.12.0 | Jul 28, 2023 |
@@ -112,7 +115,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ## Install
 
-`./bin/elasticsearch-plugin install -b https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/7.17.14.0/prometheus-exporter-7.17.14.0.zip`
+`./bin/elasticsearch-plugin install -b https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/7.17.15.0/prometheus-exporter-7.17.15.0.zip`
 
 **Do not forget to restart the node after the installation!**
 
@@ -131,11 +134,13 @@ prometheus.indices: false
 ```
 
 To disable exporting cluster settings use:
+
 ```
 prometheus.cluster.settings: false
 ```
 
-These settings can be also [updated dynamically](https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-update-settings.html).
+These settings can be
+also [updated dynamically](https://www.elastic.co/guide/en/elasticsearch/reference/master/cluster-update-settings.html).
 
 ## Uninstall
 
@@ -202,23 +207,26 @@ The Maven project site is available at [GitHub](https://github.com/mindw/elastic
 
 ## Testing
 
-Project contains [integration tests](src/test/resources/rest-api-spec) implemented using
+Project contains [integration tests](src/yamlRestTest/resources/rest-api-spec) implemented using
 [rest layer](https://github.com/elastic/elasticsearch/blob/master/TESTING.asciidoc#testing-the-rest-layer)
 framework.
 
 To run everything similar to the GitHub Actions pipeline you can do:
+
 ```
 docker run -v $(pwd):/home/gradle gradle:7.5.1-jdk17 su gradle -c 'gradle check'
 ```
-NOTE: Please keep version in sync with .github/workflows/ci.yml
 
+NOTE: Please keep version in sync with `.github/workflows/ci.yml`
 
 Complete test suite is run using:
+
 ```
 gradle clean check
 ```
 
 To run individual test file use:
+
 ```
 gradle :integTest \
   -Dtests.class=org.elasticsearch.rest.PrometheusRestHandlerClientYamlTestSuiteIT \
