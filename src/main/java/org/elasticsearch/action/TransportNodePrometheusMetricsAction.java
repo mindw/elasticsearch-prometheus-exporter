@@ -35,6 +35,7 @@ import org.elasticsearch.client.internal.Client;
 import org.elasticsearch.common.inject.Inject;
 import org.elasticsearch.common.settings.ClusterSettings;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.util.concurrent.EsExecutors;
 import org.elasticsearch.core.Nullable;
 import org.elasticsearch.tasks.Task;
 import org.elasticsearch.transport.TransportService;
@@ -60,8 +61,12 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
             TransportService transportService, ActionFilters actionFilters,
             ClusterSettings clusterSettings
     ) {
-        super(NodePrometheusMetricsAction.NAME, transportService, actionFilters,
-                NodePrometheusMetricsRequest::new
+        super(
+            NodePrometheusMetricsAction.NAME,
+            transportService,
+            actionFilters,
+            NodePrometheusMetricsRequest::new,
+            EsExecutors.DIRECT_EXECUTOR_SERVICE
         );
         this.client = client;
         this.settings = settings;
