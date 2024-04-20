@@ -39,17 +39,16 @@ jobs:
         distribution: temurin
         java-version: "${{ env.java-version }}"
 
-    - name: Gradle build
-      uses: gradle/actions/setup-gradle@v3
-      with:
-        gradle-version: "${{ env.gradle-version }}"
-        arguments: "--build-cache assemble"
-
-    - name: Gradle check
+    - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: ${{ env.gradle-version }}
-        arguments: check
+
+    - name: Gradle build
+      run: gradle --build-cache assemble
+
+    - name: Gradle check
+      run: gradle check
 
     - name: GitHub release
       if: contains('refs/heads/master refs/heads/7.x', github.ref) && matrix.os == 'ubuntu-22.04'
