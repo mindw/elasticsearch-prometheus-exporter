@@ -566,7 +566,7 @@ public class PrometheusMetricsCollector {
         catalog.setClusterGauge("index_doc_number", idx.getDocs().getCount(), indexName, context);
         catalog.setClusterGauge("index_doc_deleted_number", idx.getDocs().getDeleted(), indexName, context);
 
-        catalog.setClusterGauge("index_store_size", idx.getStore().getSizeInBytes(), indexName, context);
+        catalog.setClusterGauge("index_store_size", idx.getStore().sizeInBytes(), indexName, context);
 
         var idxTotal = idx.getIndexing().getTotal();
         catalog.setClusterGauge("index_indexing_delete_count", idxTotal.getDeleteCount(), indexName, context);

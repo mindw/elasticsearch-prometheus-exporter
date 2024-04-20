@@ -85,7 +85,7 @@ dependencies {
     releaseJars "${project.group}:${project.name}:${project.version}"
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs << "-Xlint:unchecked,deprecation"
 }
 
@@ -97,7 +97,7 @@ esplugin {
     classname pluginClassname
 }
 
-testClusters.all {
+testClusters.configureEach {
     numberOfNodes = 2
 }
 
