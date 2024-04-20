@@ -40,13 +40,13 @@ jobs:
         java-version: "${{ env.java-version }}"
 
     - name: Gradle build
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: "${{ env.gradle-version }}"
         arguments: "--build-cache assemble"
 
     - name: Gradle check
-      uses: gradle/gradle-build-action@v3
+      uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: ${{ env.gradle-version }}
         arguments: check
