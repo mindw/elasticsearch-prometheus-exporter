@@ -56,6 +56,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin   | Release date |
 |---------------|----------|--------------|
+| 8.13.4        | 8.13.4.0 | May 16, 2024 |
 | 8.13.3        | 8.13.3.0 | May 06, 2024 |
 | 8.13.2        | 8.13.2.0 | Apr 20, 2024 |
 | 8.12.2        | 8.12.2.0 | Feb 24, 2024 |
@@ -106,7 +107,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ```
 ./bin/elasticsearch-plugin install -b \
-  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.13.3.0/prometheus-exporter-8.13.3.0.zip
+  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.13.4.0/prometheus-exporter-8.13.4.0.zip
 ```
 
 **Do not forget to restart the node after the installation!**
