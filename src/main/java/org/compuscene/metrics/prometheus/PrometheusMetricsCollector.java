@@ -764,8 +764,8 @@ public class PrometheusMetricsCollector {
                 catalog.setNodeGauge("threadpool_queue", st.queue(), name);
                 catalog.setNodeGauge("threadpool_active", st.active(), name);
                 catalog.setNodeGauge("threadpool_largest", st.largest(), name);
-                catalog.setNodeCounter("threadpool_rejected", st.completed(), name);
-                catalog.setNodeCounter("threadpool_completed", st.rejected(), name);
+                catalog.setNodeCounter("threadpool_completed", st.completed(), name);
+                catalog.setNodeCounter("threadpool_rejected", st.rejected(), name);
             }
         }
     }
