@@ -28,7 +28,7 @@ import java.io.IOException;
 public class NodePrometheusMetricsRequest extends MasterNodeReadRequest<NodePrometheusMetricsRequest> {
 
     public NodePrometheusMetricsRequest() {
-        super();
+        super(TRAPPY_IMPLICIT_DEFAULT_MASTER_NODE_TIMEOUT);
     }
 
     public NodePrometheusMetricsRequest(StreamInput in) throws IOException {
