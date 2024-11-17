@@ -32,7 +32,7 @@ import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.support.ActionFilters;
 import org.elasticsearch.action.support.HandledTransportAction;
 import org.elasticsearch.client.internal.Client;
-import org.elasticsearch.common.inject.Inject;
+import org.elasticsearch.injection.guice.Inject;
 import org.elasticsearch.common.settings.ClusterSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.util.concurrent.EsExecutors;
@@ -114,7 +114,7 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
             this.listener = listener;
 
             // Note: when using ClusterHealthRequest in Java, it pulls data at the shards level, according to ES source
-            this.healthRequest = new ClusterHealthRequest().local(true);
+            this.healthRequest = new ClusterHealthRequest(ClusterStateRequest.DEFAULT_WAIT_FOR_NODE_TIMEOUT).local(true);
 
             this.nodesStatsRequest = new NodesStatsRequest("_local").clear().all();
 
@@ -124,7 +124,7 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
 
             // Cluster settings are get via ClusterStateRequest (see elasticsearch RestClusterGetSettingsAction for details)
             // We prefer to send it to master node (hence local=false; it should be set by default, but we want to be sure).
-            this.clusterStateRequest = isPrometheusClusterSettings ? new ClusterStateRequest().clear().metadata(
+            this.clusterStateRequest = isPrometheusClusterSettings ? new ClusterStateRequest(ClusterStateRequest.DEFAULT_WAIT_FOR_NODE_TIMEOUT).clear().metadata(
                     true).local(false) : null;
         }
 
