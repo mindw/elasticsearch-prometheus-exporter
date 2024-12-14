@@ -1055,12 +1055,12 @@ public class PrometheusMetricsCollector {
                 catalog.setNodeInfo("os_cgroup_control_group", "cpuacct", cgroup.getCpuAcctControlGroup());
                 catalog.setNodeInfo("os_cgroup_control_group", "cpu", cgroup.getCpuControlGroup());
                 catalog.setNodeInfo("os_cgroup_control_group", "memory", cgroup.getMemoryControlGroup());
-                catalog.setNodeGauge("os_cgroup_cpuacct_usage", cgroup.getCpuAcctUsageNanos() / 1E9);
+                catalog.setNodeGauge("os_cgroup_cpuacct_usage", cgroup.getCpuAcctUsageNanos().doubleValue() / 1E9);
                 catalog.setNodeGauge("os_cgroup_cpu_cfs_period", cgroup.getCpuCfsPeriodMicros() / 1E6);
                 catalog.setNodeGauge("os_cgroup_cpu_cfs_quota", cgroup.getCpuCfsQuotaMicros() / 1E6);
-                catalog.setNodeGauge("os_cgroup_cpu_cfs_stat_number_of_elapsed_periods", cgroup.getCpuStat().getNumberOfElapsedPeriods());
-                catalog.setNodeGauge("os_cgroup_cpu_cfs_stat_number_of_times_throttled", cgroup.getCpuStat().getNumberOfTimesThrottled());
-                catalog.setNodeGauge("os_cgroup_cpu_cfs_stat_time_throttled", cgroup.getCpuStat().getTimeThrottledNanos() / 1E9);
+                catalog.setNodeGauge("os_cgroup_cpu_cfs_stat_number_of_elapsed_periods", cgroup.getCpuStat().getNumberOfElapsedPeriods().longValue());
+                catalog.setNodeGauge("os_cgroup_cpu_cfs_stat_number_of_times_throttled", cgroup.getCpuStat().getNumberOfTimesThrottled().longValue());
+                catalog.setNodeGauge("os_cgroup_cpu_cfs_stat_time_throttled", cgroup.getCpuStat().getTimeThrottledNanos().doubleValue() / 1E9);
                 catalog.setNodeGauge("os_cgroup_cpu_cfs_period", cgroup.getCpuCfsPeriodMicros() / 1E6);
                 catalog.setNodeGauge("os_cgroup_cpu_cfs_quota", cgroup.getCpuCfsQuotaMicros() / 1E6);
                 // limit in CGroupsV2 limit can be a string - "max" so in that case we give it os_mem_total value
