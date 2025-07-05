@@ -103,5 +103,5 @@ testClusters.configureEach {
 
 checkstyle {
     configFile = new File(rootDir, "checkstyle.xml")
-    toolVersion = "8.2"
+    toolVersion = "10.26.1"
 }
