@@ -4,10 +4,12 @@ on:
   push:
     branches:
     - "master"
+    - "8.x"
     - "7.x"
   pull_request:
     branches:
     - "master"
+    - "8.x"
     - "7.x"
 
 env:
@@ -51,7 +53,7 @@ jobs:
       run: gradle check
 
     - name: GitHub release
-      if: contains('refs/heads/master refs/heads/7.x', github.ref) && matrix.os == 'ubuntu-22.04'
+      if: contains('refs/heads/master refs/heads/8.x refs/heads/7.x', github.ref) && matrix.os == 'ubuntu-22.04'
       run: |
         version=$(cat gradle.properties | grep -e "^version *=" | awk -F" *= *" '{print $NF}')
         is_snapshot=$(echo ${version} | grep -e "-SNAPSHOT$" | wc -l)
