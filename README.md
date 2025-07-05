@@ -27,6 +27,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ## Fork diff with upstream
 
+- Use JDK 21 (must match ElasticSearch JVM)
 - 100% compatible metrics names with upstream.
 - 99% of metrics names synced with official documentation.
 - Added support OpenMetrics 1.0 format (info, enum, units etc.)
@@ -56,6 +57,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin   | Release date  |
 |---------------|----------|---------------|
+| 8.18.3        | 8.18.3.0 | Jul 05, 2025  |
 | 8.18.2        | 8.18.2.0 | May 31, 2025  |
 | 8.18.1        | 8.18.1.0 | May 07, 2025  |
 | 8.18.0        | 8.18.0.0 | Apr 17, 2025  |
@@ -127,7 +129,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ```
 ./bin/elasticsearch-plugin install -b \
-  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.18.2.0/prometheus-exporter-8.18.2.0.zip
+  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/8.18.3.0/prometheus-exporter-8.18.3.0.zip
 ```
 
 **Do not forget to restart the node after the installation!**
@@ -227,7 +229,7 @@ framework.
 To run everything similar to the GitHub Actions pipeline you can do:
 
 ```
-docker run -v $(pwd):/home/gradle gradle:7.4.2-jdk17 su gradle -c 'gradle check'
+docker run -v $(pwd):/home/gradle gradle:8.8.0-jdk21 su gradle -c 'gradle check'
 ```
 
 NOTE: Please keep version in sync with `.github/workflows/ci.yml`

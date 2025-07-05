@@ -11,8 +11,8 @@ on:
     - "7.x"
 
 env:
-  gradle-version: "8.7"
-  java-version: "17"
+  gradle-version: "8.8"
+  java-version: "21"
 
 jobs:
   build:
