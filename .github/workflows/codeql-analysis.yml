@@ -15,11 +15,13 @@ on:
   push:
     branches:
     - "master"
+    - "8.x"
     - "7.x"
   pull_request:
     # The branches below must be a subset of the branches above
     branches:
     - "master"
+    - "8.x"
     - "7.x"
   schedule:
   - cron: '41 3 * * 0'
@@ -46,7 +48,7 @@ jobs:
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: "17"
+        java-version: "21"
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
