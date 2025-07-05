@@ -53,11 +53,7 @@ import org.elasticsearch.rest.prometheus.RestPrometheusMetricsAction;
 import org.elasticsearch.script.ScriptStats;
 import org.elasticsearch.threadpool.ThreadPoolStats;
 import org.elasticsearch.transport.TransportStats;
-
-import java.lang.management.ManagementFactory;
-import java.lang.reflect.*;
 import java.util.*;
-
 import io.prometheus.client.Summary;
 
 /**
@@ -854,11 +850,6 @@ public class PrometheusMetricsCollector {
 
     @SuppressWarnings("checkstyle:LineLength")
     private void registerProcessMetrics() {
-        // the Prometheus java client is unable to fetch these.
-        catalog.registerCounter("process_cpu_seconds", "Total user and system CPU time spent in seconds.");
-        catalog.registerGauge("process_open_fds", "Number of open file descriptors.");
-        catalog.registerGauge("process_max_fds", "Maximum number of open file descriptors.");
-
         catalog.registerNodeGauge("process_cpu_percent", "CPU usage in percent, or -1 if not known at the time the stats are computed.");
         catalog.registerNodeGaugeUnit("process_cpu_time", "seconds", "CPU time (in seconds) used by the process on which the Java virtual machine is running, or -1 if not supported.");
 
@@ -870,19 +861,6 @@ public class PrometheusMetricsCollector {
 
     private void updateProcessMetrics(ProcessStats ps) {
         if (ps != null) {
-            try {
-                // The ES metrics is in millis, the java prometheus one is in nanos, so we do our own thing
-                // catalog.setCounter("process_cpu_seconds", ps.getCpu().getTotal().millis() / 1E3);
-                var osBean = ManagementFactory.getOperatingSystemMXBean();
-                Method method =  Class.forName("com.sun.management.OperatingSystemMXBean").getMethod("getProcessCpuTime");
-                Long processCpuTime = (Long) method.invoke(osBean);
-                catalog.setCounter("process_cpu_seconds", processCpuTime / 1E9);
-            } catch (Exception e) {
-                logger.debug("Could not access process cpu time", e);
-            }
-            catalog.setGauge("process_open_fds", ps.getOpenFileDescriptors());
-            catalog.setGauge("process_max_fds", ps.getMaxFileDescriptors());
-
             catalog.setNodeGauge("process_cpu_percent", ps.getCpu().getPercent());
             catalog.setNodeGauge("process_cpu_time", ps.getCpu().getTotal().millis() / 1E3);
 

@@ -1,0 +1,4 @@
+ALL-UNNAMED:
+- files:
+  - path: /proc/self/status
+    mode: read

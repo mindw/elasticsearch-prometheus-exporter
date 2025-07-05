@@ -24,7 +24,6 @@ import org.apache.logging.log4j.Logger;
 import org.compuscene.metrics.prometheus.PrometheusMetricsCatalog;
 import org.compuscene.metrics.prometheus.PrometheusMetricsCollector;
 import org.compuscene.metrics.prometheus.PrometheusSettings;
-import org.elasticsearch.SpecialPermission;
 import org.elasticsearch.action.NodePrometheusMetricsRequest;
 import org.elasticsearch.action.NodePrometheusMetricsResponse;
 import org.elasticsearch.client.internal.node.NodeClient;
@@ -33,11 +32,6 @@ import org.elasticsearch.common.settings.ClusterSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.rest.*;
 import org.elasticsearch.rest.action.RestResponseListener;
-
-import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import java.util.List;
 
 /**
@@ -99,24 +93,15 @@ public class RestPrometheusMetricsAction extends BaseRestHandler {
                                 prometheusSettings.getPrometheusIndices(),
                                 prometheusSettings.getPrometheusClusterSettings()
                         );
-                        String contentType = catalog.getContentType(acceptHeader);
                         collector.registerMetrics();
-                        SpecialPermission.check();
-                        String metrics;
-                        try {
-                            metrics = AccessController.doPrivileged((PrivilegedExceptionAction<String>) () -> {
-                                collector.updateMetrics(
-                                        response.getClusterHealth(),
-                                        response.getNodeStats(),
-                                        response.getIndicesStats(),
-                                        response.getClusterStatsData()
-                                );
-                                return catalog.toTextFormat(contentType);
-                            });
-                        } catch (PrivilegedActionException e) {
-                            throw (IOException) e.getCause();
-                        }
-                        return new RestResponse(RestStatus.OK, contentType, metrics);
+                        collector.updateMetrics(
+                                response.getClusterHealth(),
+                                response.getNodeStats(),
+                                response.getIndicesStats(),
+                                response.getClusterStatsData()
+                        );
+                        String contentType = catalog.getContentType(acceptHeader);
+                        return new RestResponse(RestStatus.OK, contentType, catalog.toTextFormat(contentType));
                     }
                 });
     }
