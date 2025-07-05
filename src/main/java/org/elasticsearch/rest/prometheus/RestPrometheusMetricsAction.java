@@ -19,7 +19,6 @@ package org.elasticsearch.rest.prometheus;
 
 import static org.elasticsearch.action.NodePrometheusMetricsAction.INSTANCE;
 import static org.elasticsearch.rest.RestRequest.Method.GET;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.compuscene.metrics.prometheus.PrometheusMetricsCatalog;
@@ -40,7 +39,6 @@ import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * REST action class for Prometheus Exporter plugin.
@@ -70,15 +68,12 @@ public class RestPrometheusMetricsAction extends BaseRestHandler {
     protected RestChannelConsumer prepareRequest(RestRequest request, NodeClient client) {
         if (logger.isTraceEnabled()) {
             String remoteAddress = NetworkAddress.format(request.getHttpChannel().getRemoteAddress());
-            logger.trace(String.format(Locale.ENGLISH, "Received request for Prometheus metrics from %s",
-                    remoteAddress));
+            logger.trace("Received request for Prometheus metrics from {}", remoteAddress);
         }
 
         String acceptHeader = request.header("Accept");
         if (logger.isTraceEnabled()) {
-            logger.trace(String.format(Locale.ENGLISH, "Request accept header %s",
-                    acceptHeader != null ? acceptHeader : "NONE"
-            ));
+            logger.trace("Request accept header {}", acceptHeader != null ? acceptHeader : "NONE");
         }
         NodePrometheusMetricsRequest metricsRequest = new NodePrometheusMetricsRequest();
 

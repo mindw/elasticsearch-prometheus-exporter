@@ -20,10 +20,8 @@ package org.compuscene.metrics.prometheus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.elasticsearch.Build;
 import org.elasticsearch.action.ClusterStatsData;
 import org.elasticsearch.action.admin.cluster.health.ClusterHealthResponse;
@@ -1155,10 +1153,11 @@ public class PrometheusMetricsCollector {
     private void updateESSettings(ClusterStatsData stats) {
         if (stats != null) {
             catalog.setClusterGauge("cluster_routing_allocation_disk_threshold_enabled", Boolean.TRUE.equals(stats.getThresholdEnabled()) ? 1 : 0);
-            // According to Elasticsearch documentation the following settings must be set either in pct or bytes size.
-            // Mixing is not allowed. We rely on Elasticsearch to do all necessary checks and we simply
-            // output all those metrics that are not null. If this will lead to mixed metric then we do not
-            // consider it our fault.
+            // According to Elasticsearch documentation, the following settings must be set either in pct or bytes size.
+            // Mixing is not allowed.
+            // We rely on Elasticsearch to do all necessary checks, and we simply output all those metrics that are not
+            // null.
+            // If this leads to mixed metric then we do not consider it our fault.
             if (stats.getDiskLowInBytes() != null) { catalog.setClusterGauge("cluster_routing_allocation_disk_watermark_low_bytes", stats.getDiskLowInBytes()); }
             if (stats.getDiskHighInBytes() != null) { catalog.setClusterGauge("cluster_routing_allocation_disk_watermark_high_bytes", stats.getDiskHighInBytes()); }
             if (stats.getFloodStageInBytes() != null) { catalog.setClusterGauge("cluster_routing_allocation_disk_watermark_flood_stage_bytes", stats.getFloodStageInBytes()); }
