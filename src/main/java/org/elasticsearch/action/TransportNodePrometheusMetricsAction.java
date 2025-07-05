@@ -32,11 +32,11 @@ import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.action.support.ActionFilters;
 import org.elasticsearch.action.support.HandledTransportAction;
 import org.elasticsearch.client.internal.Client;
-import org.elasticsearch.injection.guice.Inject;
 import org.elasticsearch.common.settings.ClusterSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.util.concurrent.EsExecutors;
 import org.elasticsearch.core.Nullable;
+import org.elasticsearch.injection.guice.Inject;
 import org.elasticsearch.tasks.Task;
 import org.elasticsearch.transport.TransportService;
 
@@ -57,26 +57,32 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
 
     @Inject
     public TransportNodePrometheusMetricsAction(
-            Settings settings, Client client,
-            TransportService transportService, ActionFilters actionFilters,
+            Settings settings,
+            Client client,
+            TransportService transportService,
+            ActionFilters actionFilters,
             ClusterSettings clusterSettings
     ) {
         super(
-            NodePrometheusMetricsAction.NAME,
-            transportService,
-            actionFilters,
-            NodePrometheusMetricsRequest::new,
-            EsExecutors.DIRECT_EXECUTOR_SERVICE
+                NodePrometheusMetricsAction.NAME,
+                transportService,
+                actionFilters,
+                NodePrometheusMetricsRequest::new,
+                EsExecutors.DIRECT_EXECUTOR_SERVICE
         );
         this.client = client;
         this.settings = settings;
         this.clusterSettings = clusterSettings;
-        this.prometheusSettings = new PrometheusSettings(settings, clusterSettings);
+        this.prometheusSettings = new PrometheusSettings(
+                settings,
+                clusterSettings
+        );
     }
 
     @Override
     protected void doExecute(
-            Task task, NodePrometheusMetricsRequest request,
+            Task task,
+            NodePrometheusMetricsRequest request,
             ActionListener<NodePrometheusMetricsResponse> listener
     ) {
         new AsyncAction(listener).start();
@@ -124,12 +130,15 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
 
             // Cluster settings are get via ClusterStateRequest (see elasticsearch RestClusterGetSettingsAction for details)
             // We prefer to send it to master node (hence local=false; it should be set by default, but we want to be sure).
-            this.clusterStateRequest = isPrometheusClusterSettings ? new ClusterStateRequest(ClusterStateRequest.DEFAULT_WAIT_FOR_NODE_TIMEOUT).clear().metadata(
-                    true).local(false) : null;
+            this.clusterStateRequest = isPrometheusClusterSettings ? new ClusterStateRequest(
+                    ClusterStateRequest.DEFAULT_WAIT_FOR_NODE_TIMEOUT).clear().metadata(true).local(false) : null;
         }
 
         private void gatherRequests() {
-            listener.onResponse(buildResponse(clusterHealthResponse, nodesStatsResponse, indicesStatsResponse,
+            listener.onResponse(buildResponse(
+                    clusterHealthResponse,
+                    nodesStatsResponse,
+                    indicesStatsResponse,
                     clusterStateResponse
             ));
         }
@@ -144,7 +153,10 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
 
                     @Override
                     public void onFailure(Exception e) {
-                        listener.onFailure(new ElasticsearchException("Cluster state request failed", e));
+                        listener.onFailure(new ElasticsearchException(
+                                "Cluster state request failed",
+                                e
+                        ));
                     }
                 };
 
@@ -154,7 +166,10 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
                     public void onResponse(IndicesStatsResponse response) {
                         indicesStatsResponse = response;
                         if (isPrometheusClusterSettings) {
-                            client.admin().cluster().state(clusterStateRequest, clusterStateResponseActionListener);
+                            client.admin().cluster().state(
+                                    clusterStateRequest,
+                                    clusterStateResponseActionListener
+                            );
                         } else {
                             gatherRequests();
                         }
@@ -162,7 +177,10 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
 
                     @Override
                     public void onFailure(Exception e) {
-                        listener.onFailure(new ElasticsearchException("Indices stats request failed", e));
+                        listener.onFailure(new ElasticsearchException(
+                                "Indices stats request failed",
+                                e
+                        ));
                     }
                 };
 
@@ -172,7 +190,10 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
                     public void onResponse(NodesStatsResponse nodeStats) {
                         nodesStatsResponse = nodeStats;
                         if (isPrometheusIndices) {
-                            client.admin().indices().stats(indicesStatsRequest, indicesStatsResponseActionListener);
+                            client.admin().indices().stats(
+                                    indicesStatsRequest,
+                                    indicesStatsResponseActionListener
+                            );
                         } else {
                             indicesStatsResponseActionListener.onResponse(null);
                         }
@@ -180,7 +201,10 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
 
                     @Override
                     public void onFailure(Exception e) {
-                        listener.onFailure(new ElasticsearchException("Nodes stats request failed", e));
+                        listener.onFailure(new ElasticsearchException(
+                                "Nodes stats request failed",
+                                e
+                        ));
                     }
                 };
 
@@ -189,17 +213,26 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
                     @Override
                     public void onResponse(ClusterHealthResponse response) {
                         clusterHealthResponse = response;
-                        client.admin().cluster().nodesStats(nodesStatsRequest, nodesStatsResponseActionListener);
+                        client.admin().cluster().nodesStats(
+                                nodesStatsRequest,
+                                nodesStatsResponseActionListener
+                        );
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-                        listener.onFailure(new ElasticsearchException("Cluster health request failed", e));
+                        listener.onFailure(new ElasticsearchException(
+                                "Cluster health request failed",
+                                e
+                        ));
                     }
                 };
 
         private void start() {
-            client.admin().cluster().health(healthRequest, clusterHealthResponseActionListener);
+            client.admin().cluster().health(
+                    healthRequest,
+                    clusterHealthResponseActionListener
+            );
         }
 
         protected NodePrometheusMetricsResponse buildResponse(
@@ -208,12 +241,19 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
                 @Nullable IndicesStatsResponse indicesStats,
                 @Nullable ClusterStateResponse clusterStateResponse
         ) {
-            NodePrometheusMetricsResponse response = new NodePrometheusMetricsResponse(clusterHealth,
-                    nodesStats.getNodes().get(0), indicesStats, clusterStateResponse,
-                    settings, clusterSettings
+            NodePrometheusMetricsResponse response = new NodePrometheusMetricsResponse(
+                    clusterHealth,
+                    nodesStats.getNodes().get(0),
+                    indicesStats,
+                    clusterStateResponse,
+                    settings,
+                    clusterSettings
             );
             if (logger.isTraceEnabled()) {
-                logger.trace("Return response: [{}]", response);
+                logger.trace(
+                        "Return response: [{}]",
+                        response
+                );
             }
             return response;
         }
