@@ -135,13 +135,9 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 **Do not forget to restart the node after the installation!**
 
-Note that the plugin needs the following special permissions:
+Note that the plugin needs the following special entitlements:
 
-- java.lang.RuntimePermission accessClassInPackage.com.sun.management
-- java.io.FilePermission /proc/self/ read
-- java.lang.RuntimePermission accessClassInPackage.sun.misc
-- java.lang.RuntimePermission accessDeclaredMembers
-- java.lang.reflect.ReflectPermission suppressAccessChecks
+- files: /proc/self/ read
 
 If you have a lot of indices and think this data is irrelevant, you can disable in the main configuration file:
 
