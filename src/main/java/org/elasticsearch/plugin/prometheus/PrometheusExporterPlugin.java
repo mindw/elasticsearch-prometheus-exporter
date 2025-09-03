@@ -52,9 +52,9 @@ public class PrometheusExporterPlugin extends Plugin implements ActionPlugin {
     }
 
     @Override
-    public List<ActionHandler<? extends ActionRequest, ? extends ActionResponse>> getActions() {
+    public List<ActionHandler> getActions() {
         return singletonList(
-                new ActionHandler<>(
+                new ActionHandler(
                         NodePrometheusMetricsAction.INSTANCE,
                         TransportNodePrometheusMetricsAction.class
                 )

@@ -31,6 +31,7 @@ import org.elasticsearch.action.admin.indices.stats.IndexStats;
 import org.elasticsearch.action.admin.indices.stats.IndicesStatsResponse;
 import org.elasticsearch.cluster.health.ClusterHealthStatus;
 import org.elasticsearch.cluster.health.ClusterIndexHealth;
+import org.elasticsearch.cluster.metadata.ProjectId;
 import org.elasticsearch.cluster.node.DiscoveryNodeRole;
 import org.elasticsearch.cluster.service.ClusterStateUpdateStats;
 import org.elasticsearch.common.Strings;
@@ -798,7 +799,7 @@ public class PrometheusMetricsCollector {
                 catalog.setNodeGauge("ingest_pipeline_total_current", st.stats().ingestCurrent(), pipeline);
                 catalog.setNodeGauge("ingest_pipeline_total_failed_count", st.stats().ingestFailedCount(), pipeline);
 
-                List<IngestStats.ProcessorStat> pss = is.processorStats().get(pipeline);
+                List<IngestStats.ProcessorStat> pss = is.processorStats().get(ProjectId.DEFAULT).get(pipeline);
                 if (pss != null) {
                     for (IngestStats.ProcessorStat ps : pss) {
                         String processor = ps.name();
