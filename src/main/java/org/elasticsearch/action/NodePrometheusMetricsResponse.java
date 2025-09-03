@@ -39,7 +39,7 @@ public class NodePrometheusMetricsResponse extends ActionResponse {
     private ClusterStatsData clusterStatsData = null;
 
     public NodePrometheusMetricsResponse(StreamInput in) throws IOException {
-        super(in);
+        super();
         clusterHealth = new ClusterHealthResponse(in);
         nodeStats = new NodeStats(in);
         indicesStats = PackageAccessHelper.createIndicesStatsResponse(in);

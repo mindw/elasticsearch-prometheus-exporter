@@ -65,7 +65,7 @@ public class ClusterStatsData extends ActionResponse {
     private Double[] floodStageInPctRef = new Double[]{floodStageInPct};
 
     public ClusterStatsData(StreamInput in) throws IOException {
-        super(in);
+        super();
         thresholdEnabled = in.readOptionalBoolean();
         //
         diskLowInBytes = in.readOptionalLong();

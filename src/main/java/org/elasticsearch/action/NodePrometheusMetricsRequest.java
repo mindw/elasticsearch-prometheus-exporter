@@ -19,6 +19,7 @@ package org.elasticsearch.action;
 
 import org.elasticsearch.action.support.master.MasterNodeReadRequest;
 import org.elasticsearch.common.io.stream.StreamInput;
+import org.elasticsearch.core.TimeValue;
 import java.io.IOException;
 
 /**
@@ -27,7 +28,7 @@ import java.io.IOException;
 public class NodePrometheusMetricsRequest extends MasterNodeReadRequest<NodePrometheusMetricsRequest> {
 
     public NodePrometheusMetricsRequest() {
-        super(TRAPPY_IMPLICIT_DEFAULT_MASTER_NODE_TIMEOUT);
+        super(TimeValue.timeValueSeconds(30));
     }
 
     public NodePrometheusMetricsRequest(StreamInput in) throws IOException {
