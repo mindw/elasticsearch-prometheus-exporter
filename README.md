@@ -57,6 +57,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch  | Plugin   | Release date |
 |----------------|----------|--------------|
+| 9.1.2          | 9.1.2.0  | Sep 13, 2025 |
 | 9.1.1          | 9.1.1.0  | Sep 13, 2025 |
 | 9.1.0          | 9.1.0.0  | Sep 03, 2025 |
 | 9.0.4          | 9.0.4.0  | Jul 24, 2025 |
@@ -66,7 +67,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ```
 ./bin/elasticsearch-plugin install -b \
-  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/9.1.1.0/prometheus-exporter-9.1.1.0.zip
+  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/9.1.2.0/prometheus-exporter-9.1.2.0.zip
 ```
 
 **Do not forget to restart the node after the installation!**
