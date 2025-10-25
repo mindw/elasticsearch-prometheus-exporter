@@ -30,7 +30,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 - Use JDK 21 (must match ElasticSearch JVM)
 - 100% compatible metrics names with upstream.
 - 99% of metrics names synced with official documentation.
-- Added support OpenMetrics 1.0 format (info, enum, units etc.)
+- Added support for OpenMetrics 1.0 format (info, enum, units etc.)
 - Expose units where applicable.
 - Expose indexing pressure metrics.
 - Expose adaptive selection metrics.
@@ -57,7 +57,8 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin  | Release date |
 |---------------|---------|--------------|
-| 9.1.4         | 9.1.5.0 | Oct 07, 2025 |
+| 9.1.6         | 9.1.6.0 | Oct 25, 2025 |
+| 9.1.5         | 9.1.5.0 | Oct 07, 2025 |
 | 9.1.4         | 9.1.4.0 | Sep 19, 2025 |
 | 9.1.3         | 9.1.3.0 | Sep 13, 2025 |
 | 9.1.2         | 9.1.2.0 | Sep 13, 2025 |
@@ -70,7 +71,7 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ```
 ./bin/elasticsearch-plugin install -b \
-  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/9.1.5.0/prometheus-exporter-9.1.5.0.zip
+  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/9.1.6.0/prometheus-exporter-9.1.6.0.zip
 ```
 
 **Do not forget to restart the node after the installation!**
@@ -163,7 +164,7 @@ Project contains [integration tests](src/yamlRestTest/resources/rest-api-spec) i
 [rest layer](https://github.com/elastic/elasticsearch/blob/master/TESTING.asciidoc#testing-the-rest-layer)
 framework.
 
-To run everything similar to the GitHub Actions pipeline you can do:
+To run everything similar to the GitHub Actions pipeline, you can do:
 
 ```
 docker run -v $(pwd):/home/gradle gradle:8.8.0-jdk21 su gradle -c 'gradle check'
