@@ -129,9 +129,8 @@ public class TransportNodePrometheusMetricsAction extends HandledTransportAction
             this.indicesStatsRequest = isPrometheusIndices ? new IndicesStatsRequest() : null;
 
             // Cluster settings are get via ClusterStateRequest (see elasticsearch RestClusterGetSettingsAction for details)
-            // We prefer to send it to master node (hence local=false; it should be set by default, but we want to be sure).
             this.clusterStateRequest = isPrometheusClusterSettings ? new ClusterStateRequest(
-                    ClusterStateRequest.DEFAULT_WAIT_FOR_NODE_TIMEOUT).clear().metadata(true).local(false) : null;
+                    ClusterStateRequest.DEFAULT_WAIT_FOR_NODE_TIMEOUT).clear().metadata(true) : null;
         }
 
         private void gatherRequests() {
