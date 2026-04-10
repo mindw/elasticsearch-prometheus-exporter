@@ -55,33 +55,34 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 ### Version 9.X
 
-| Elasticsearch | Plugin  | Release date |
-|---------------|---------|--------------|
-| 9.3.2         | 9.3.2.0 | Mar 31, 2026 |
-| 9.3.1         | 9.3.1.0 | Mar 02, 2026 |
-| 9.3.0         | 9.3.0.0 | Feb 10, 2026 |
-| 9.2.5         | 9.2.5.0 | Feb 06, 2026 |
-| 9.2.4         | 9.2.4.0 | Jan 16, 2026 |
-| 9.2.3         | 9.2.3.0 | Dec 20, 2025 |
-| 9.2.2         | 9.2.2.0 | Dec 05, 2025 |
-| 9.2.1         | 9.2.1.0 | Nov 15, 2025 |
-| 9.2.0         | 9.2.0.0 | Nov 15, 2025 |
-| 9.1.7         | 9.1.7.0 | Nov 15, 2025 |
-| 9.1.6         | 9.1.6.0 | Oct 25, 2025 |
-| 9.1.5         | 9.1.5.0 | Oct 07, 2025 |
-| 9.1.4         | 9.1.4.0 | Sep 19, 2025 |
-| 9.1.3         | 9.1.3.0 | Sep 13, 2025 |
-| 9.1.2         | 9.1.2.0 | Sep 13, 2025 |
-| 9.1.1         | 9.1.1.0 | Sep 13, 2025 |
-| 9.1.0         | 9.1.0.0 | Sep 03, 2025 |
-| 9.0.4         | 9.0.4.0 | Jul 24, 2025 |
-| 9.0.3         | 9.0.3.0 | Jul 05, 2025 |
+| Elasticsearch | Plugin   | Release date |
+|---------------|----------|--------------|
+| 9.3.3         | 9.3.3.0  | Apr 10, 2026 |
+| 9.3.2         | 9.3.2.0  | Mar 31, 2026 |
+| 9.3.1         | 9.3.1.0  | Mar 02, 2026 |
+| 9.3.0         | 9.3.0.0  | Feb 10, 2026 |
+| 9.2.5         | 9.2.5.0  | Feb 06, 2026 |
+| 9.2.4         | 9.2.4.0  | Jan 16, 2026 |
+| 9.2.3         | 9.2.3.0  | Dec 20, 2025 |
+| 9.2.2         | 9.2.2.0  | Dec 05, 2025 |
+| 9.2.1         | 9.2.1.0  | Nov 15, 2025 |
+| 9.2.0         | 9.2.0.0  | Nov 15, 2025 |
+| 9.1.7         | 9.1.7.0  | Nov 15, 2025 |
+| 9.1.6         | 9.1.6.0  | Oct 25, 2025 |
+| 9.1.5         | 9.1.5.0  | Oct 07, 2025 |
+| 9.1.4         | 9.1.4.0  | Sep 19, 2025 |
+| 9.1.3         | 9.1.3.0  | Sep 13, 2025 |
+| 9.1.2         | 9.1.2.0  | Sep 13, 2025 |
+| 9.1.1         | 9.1.1.0  | Sep 13, 2025 |
+| 9.1.0         | 9.1.0.0  | Sep 03, 2025 |
+| 9.0.4         | 9.0.4.0  | Jul 24, 2025 |
+| 9.0.3         | 9.0.3.0  | Jul 05, 2025 |
 
 ## Install
 
 ```
 ./bin/elasticsearch-plugin install -b \
-  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/9.3.2.0/prometheus-exporter-9.3.2.0.zip
+  https://github.com/mindw/elasticsearch-prometheus-exporter/releases/download/9.3.3.0/prometheus-exporter-9.3.3.0.zip
 ```
 
 **Do not forget to restart the node after the installation!**
