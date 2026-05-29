@@ -21,21 +21,17 @@ import static java.util.Collections.singletonList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.compuscene.metrics.prometheus.PrometheusSettings;
-import org.elasticsearch.action.ActionRequest;
-import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.NodePrometheusMetricsAction;
 import org.elasticsearch.action.TransportNodePrometheusMetricsAction;
-import org.elasticsearch.cluster.metadata.IndexNameExpressionResolver;
 import org.elasticsearch.cluster.node.DiscoveryNodes;
-import org.elasticsearch.common.io.stream.NamedWriteableRegistry;
 import org.elasticsearch.common.settings.*;
 import org.elasticsearch.features.NodeFeature;
 import org.elasticsearch.plugins.ActionPlugin;
 import org.elasticsearch.plugins.Plugin;
-import org.elasticsearch.rest.RestController;
 import org.elasticsearch.rest.RestHandler;
 import org.elasticsearch.rest.prometheus.RestPrometheusMetricsAction;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
@@ -47,8 +43,16 @@ import java.util.function.Supplier;
 public class PrometheusExporterPlugin extends Plugin implements ActionPlugin {
     private static final Logger logger = LogManager.getLogger(PrometheusExporterPlugin.class);
 
+    private ClusterSettings clusterSettings;
+
     public PrometheusExporterPlugin() {
         logger.info("starting Prometheus exporter plugin");
+    }
+
+    @Override
+    public Collection<?> createComponents(PluginServices services) {
+        this.clusterSettings = services.clusterService().getClusterSettings();
+        return Collections.emptyList();
     }
 
     @Override
@@ -62,20 +66,14 @@ public class PrometheusExporterPlugin extends Plugin implements ActionPlugin {
     }
 
     @Override
-    public List<RestHandler> getRestHandlers(
-            Settings settings,
-            NamedWriteableRegistry namedWriteableRegistry,
-            RestController restController,
-            ClusterSettings clusterSettings,
-            IndexScopedSettings indexScopedSettings,
-            SettingsFilter settingsFilter,
-            IndexNameExpressionResolver indexNameExpressionResolver,
+    public Collection<RestHandler> getRestHandlers(
+            ActionPlugin.RestHandlersServices restHandlersServices,
             Supplier<DiscoveryNodes> nodesInCluster,
             Predicate<NodeFeature> clusterSupportsFeature
     ) {
         return singletonList(
                 new RestPrometheusMetricsAction(
-                        settings,
+                        restHandlersServices.settings(),
                         clusterSettings
                 )
         );

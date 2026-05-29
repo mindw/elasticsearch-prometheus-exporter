@@ -15,6 +15,7 @@ buildscript {
 
     dependencies {
         classpath "org.elasticsearch.gradle:build-tools:${es_version}"
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.54.0"
         classpath group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
         classpath group: 'com.sun.xml.bind', name: 'jaxb-impl', version: '4.0.9'
         classpath group: 'com.sun.xml.bind', name: 'jaxb-core', version: '4.0.9'
@@ -26,11 +27,11 @@ buildscript {
 plugins {
     id "java"
     id "checkstyle"
-    id "com.github.ben-manes.versions" version "0.54.0"
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'com.github.ben-manes.versions'
 apply plugin: 'elasticsearch.esplugin'
 apply plugin: 'elasticsearch.yaml-rest-test'
 apply plugin: 'elasticsearch.testclusters'
