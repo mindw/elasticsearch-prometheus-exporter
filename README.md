@@ -57,7 +57,8 @@ It collects all relevant metrics and makes them available to Prometheus via the 
 
 | Elasticsearch | Plugin  | Release date |
 |---------------|---------|--------------|
-| 9.4.2         | 9.4.2.0 | May 29, 2026 |
+| 9.4.2         | 9.4.2.0 | May 30, 2026 |
+| 9.4.1         | 9.4.1.0 | May 29, 2026 |
 | 9.3.3         | 9.3.3.0 | Apr 10, 2026 |
 | 9.3.2         | 9.3.2.0 | Mar 31, 2026 |
 | 9.3.1         | 9.3.1.0 | Mar 02, 2026 |
