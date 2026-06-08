@@ -42,8 +42,8 @@ apply plugin: 'elasticsearch.testclusters'
 //    ignoreFailures = true
 //}
 
-// No unit tests in this plugin
-test.enabled = false
+// Unit tests enabled for negative counter value guard
+test.enabled = true
 
 println "Host: " + InetAddress.getLocalHost()
 println "Gradle: " + gradle.gradleVersion + " JVM: " + Jvm.current() + " Groovy: " + GroovySystem.getVersion()

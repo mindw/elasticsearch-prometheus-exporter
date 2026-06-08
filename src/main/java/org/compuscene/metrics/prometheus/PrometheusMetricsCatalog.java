@@ -113,6 +113,10 @@ public class PrometheusMetricsCatalog {
     }
 
     public void setCounter(String metric, double value, String... labelValues) {
+        if (value < 0) {
+            logger.warn("Skipping negative value {} for counter {}", value, metric);
+            return;
+        }
         Counter counter = (Counter) metrics.get(metric);
         counter.labels(labelValues).inc(value);
     }
@@ -171,6 +175,10 @@ public class PrometheusMetricsCatalog {
     }
 
     public void setClusterCounter(String metric, double value, String... labelValues) {
+        if (value < 0) {
+            logger.warn("Skipping negative value {} for counter {}{}", value, metricPrefix, metric);
+            return;
+        }
         Counter counter = (Counter) metrics.get(metric);
         counter.labels(getExtendedClusterLabelValues(labelValues)).inc(value);
     }
@@ -255,6 +263,10 @@ public class PrometheusMetricsCatalog {
     }
 
     public void setNodeCounter(String metric, double value, String... labelValues) {
+        if (value < 0) {
+            logger.warn("Skipping negative value {} for counter {}{}", value, metricPrefix, metric);
+            return;
+        }
         Counter counter = (Counter) metrics.get(metric);
         counter.labels(getExtendedNodeLabelValues(labelValues)).inc(value);
     }
