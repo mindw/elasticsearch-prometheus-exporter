@@ -21,8 +21,12 @@ import org.elasticsearch.rest.prometheus.RestPrometheusMetricsAction;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import io.prometheus.client.Collector;
 import io.prometheus.client.CollectorRegistry;
 import io.prometheus.client.Counter;
 import io.prometheus.client.Enumeration;
@@ -44,6 +48,14 @@ public class PrometheusMetricsCatalog {
 
     private final String metricPrefix;
 
+    // Hotspot exports attach GC notification listeners that are never removed,
+    // so they must be registered once per JVM, not once per scrape (#60, prometheus/client_java#809).
+    private static final CollectorRegistry HOTSPOT_REGISTRY = new CollectorRegistry();
+
+    static {
+        DefaultExports.register(HOTSPOT_REGISTRY);
+    }
+
     private final HashMap<String, Object> metrics;
     private final CollectorRegistry registry;
 
@@ -56,7 +68,6 @@ public class PrometheusMetricsCatalog {
 
         metrics = new HashMap<>();
         registry = new CollectorRegistry();
-        DefaultExports.register(registry);
     }
 
     private String[] getExtendedClusterLabelNames(String... labelNames) {
@@ -294,7 +305,13 @@ public class PrometheusMetricsCatalog {
 
     public String toTextFormat(String contentType) throws IOException {
         Writer writer = new StringWriter();
-        TextFormat.writeFormat(contentType, writer, registry.metricFamilySamples());
+        TextFormat.writeFormat(contentType, writer, metricFamilySamples());
         return writer.toString();
+    }
+
+    private java.util.Enumeration<Collector.MetricFamilySamples> metricFamilySamples() {
+        List<Collector.MetricFamilySamples> samples = new ArrayList<>(Collections.list(registry.metricFamilySamples()));
+        samples.addAll(Collections.list(HOTSPOT_REGISTRY.metricFamilySamples()));
+        return Collections.enumeration(samples);
     }
 }
