@@ -16,8 +16,12 @@
 
 package org.compuscene.metrics.prometheus;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
+import java.io.IOException;
+import io.prometheus.client.exporter.common.TextFormat;
 
 public class PrometheusMetricsCatalogTests {
 
@@ -63,5 +67,40 @@ public class PrometheusMetricsCatalogTests {
     public void testNodeCounterWithZeroValue() {
         catalog.registerNodeCounter("test_zero", "Test zero counter");
         catalog.setNodeCounter("test_zero", 0.0);
+    }
+
+    @Test
+    public void testHotspotMetricsAreExportedAlongsideCatalogMetrics() throws IOException {
+        catalog.registerNodeGauge("test_gauge", "Test gauge");
+        catalog.setNodeGauge("test_gauge", 1.0);
+        String output = catalog.toTextFormat(TextFormat.CONTENT_TYPE_004);
+        assertTrue(output.contains("es_test_gauge"));
+        assertTrue(output.contains("jvm_memory_bytes_used"));
+    }
+
+    @Test
+    public void testManyCatalogsStillExportHotspotMetricsExactlyOnce() throws IOException {
+        for (int i = 0; i < 100; i++) {
+            new PrometheusMetricsCatalog("test-cluster", "test-node", "test-id", "es_");
+        }
+        String output = catalog.toTextFormat(TextFormat.CONTENT_TYPE_004);
+        assertEquals(1, countOccurrences(output, "# TYPE jvm_memory_bytes_used gauge"));
+    }
+
+    @Test
+    public void testOpenMetricsOutputHasSingleEofMarker() throws IOException {
+        catalog.registerNodeGauge("test_gauge", "Test gauge");
+        catalog.setNodeGauge("test_gauge", 1.0);
+        String output = catalog.toTextFormat(TextFormat.CONTENT_TYPE_OPENMETRICS_100);
+        assertEquals(1, countOccurrences(output, "# EOF"));
+        assertTrue(output.trim().endsWith("# EOF"));
+    }
+
+    private static int countOccurrences(String haystack, String needle) {
+        int count = 0;
+        for (int idx = haystack.indexOf(needle); idx >= 0; idx = haystack.indexOf(needle, idx + needle.length())) {
+            count++;
+        }
+        return count;
     }
 }
